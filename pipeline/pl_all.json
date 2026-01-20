@@ -1,44 +1,7 @@
 {
-	"name": "pipeline_orderinfo",
+	"name": "pl_all",
 	"properties": {
 		"activities": [
-			{
-				"name": "Copy data sale_order",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "sp_ods_range",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [
-					{
-						"name": "table_name",
-						"value": "sale_order"
-					}
-				],
-				"typeProperties": {
-					"source": {
-						"type": "MySqlSource"
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "MySqlTable1",
-						"type": "DatasetReference"
-					}
-				]
-			},
 			{
 				"name": "sp_start_task",
 				"type": "SqlServerStoredProcedure",
@@ -114,6 +77,25 @@
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase1",
 					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Execute Pipeline tds",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "sp_ods_range",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"waitOnCompletion": true
 				}
 			}
 		],
