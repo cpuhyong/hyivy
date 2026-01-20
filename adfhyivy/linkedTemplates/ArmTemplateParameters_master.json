@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfhyivy"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"MySqlHY_password": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://sahyivy.dfs.core.windows.net/"
+		},
+		"MySqlHY_properties_typeProperties_server": {
+			"value": "192.168.31.81"
+		},
+		"MySqlHY_properties_typeProperties_database": {
+			"value": "gmall"
+		},
+		"MySqlHY_properties_typeProperties_username": {
+			"value": "ctl"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

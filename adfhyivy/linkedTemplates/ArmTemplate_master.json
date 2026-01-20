@@ -1,0 +1,84 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "数据工厂名称",
+			"defaultValue": "adfhyivy"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "“AzureDataLakeStorage1”的“accountKey”的安全字符串"
+		},
+		"MySqlHY_password": {
+			"type": "secureString",
+			"metadata": "“MySqlHY”的“password”的安全字符串"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://sahyivy.dfs.core.windows.net/"
+		},
+		"MySqlHY_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "192.168.31.81"
+		},
+		"MySqlHY_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "gmall"
+		},
+		"MySqlHY_properties_typeProperties_username": {
+			"type": "string",
+			"defaultValue": "ctl"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "包含链接 ARM 模板的存储帐户的 URI"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "包含链接 ARM 模板的存储帐户的 SAS 令牌"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adfhyivy_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"MySqlHY_password": {
+						"value": "[parameters('MySqlHY_password')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"MySqlHY_properties_typeProperties_server": {
+						"value": "[parameters('MySqlHY_properties_typeProperties_server')]"
+					},
+					"MySqlHY_properties_typeProperties_database": {
+						"value": "[parameters('MySqlHY_properties_typeProperties_database')]"
+					},
+					"MySqlHY_properties_typeProperties_username": {
+						"value": "[parameters('MySqlHY_properties_typeProperties_username')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
