@@ -98,7 +98,7 @@
 				"typeProperties": {
 					"variableName": "v_table_name",
 					"value": {
-						"value": "@substring(pipeline().Pipeline,4,20)",
+						"value": "@substring(pipeline().Pipeline,3,sub(length(pipeline().Pipeline),3))",
 						"type": "Expression"
 					}
 				}
