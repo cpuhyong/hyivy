@@ -1,9 +1,9 @@
 {
-	"name": "pl_tds",
+	"name": "pl_tds_order_info",
 	"properties": {
 		"activities": [
 			{
-				"name": "sc_get_info",
+				"name": "sc_get_begin_time",
 				"type": "Script",
 				"dependsOn": [],
 				"policy": {
@@ -22,13 +22,95 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "select begin_time,end_time from current_info_ods where hss_name = 'ods_sale_order'"
+							"text": "select begin_time from current_info_ods where hss_name = 'ods_sale_order'"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
 				}
+			},
+			{
+				"name": "Set v_begin_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_begin_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_begin_time",
+					"value": {
+						"value": "@activity('sc_get_begin_time').output",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "sc_get_end_time",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "select end_time from current_info_ods where hss_name = 'ods_sale_order'"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Set v_end_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_end_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_end_time",
+					"value": {
+						"value": "@activity('sc_get_end_time').output",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"variables": {
+			"v_begin_time": {
+				"type": "String"
+			},
+			"v_end_time": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
