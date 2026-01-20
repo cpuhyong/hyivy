@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "sc_get_begin_time",
+				"name": "sc_get_time",
 				"type": "Script",
 				"dependsOn": [
 					{
@@ -28,11 +28,19 @@
 				"typeProperties": {
 					"scripts": [
 						{
+							"parameters": [
+								{
+									"name": "p_tss_name",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_table_name')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
 							"type": "Query",
-							"text": {
-								"value": "@select begin_time,end_time from current_info_ods where tss_name = variables('v_table_name')",
-								"type": "Expression"
-							}
+							"text": "select begin_time,end_time from current_info_ods where tss_name = @p_tss_name"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
@@ -43,7 +51,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "sc_get_begin_time",
+						"activity": "sc_get_time",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -57,7 +65,7 @@
 				"typeProperties": {
 					"variableName": "v_begin_time",
 					"value": {
-						"value": "@activity('sc_get_begin_time').output.firstRow.begin_time",
+						"value": "@activity('sc_get_time').output.resultSets[0][0].begin_time",
 						"type": "Expression"
 					}
 				}
@@ -67,7 +75,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "sc_get_begin_time",
+						"activity": "sc_get_time",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -81,7 +89,7 @@
 				"typeProperties": {
 					"variableName": "v_end_time",
 					"value": {
-						"value": "@activity('sc_get_begin_time').output.firstRow.end_time",
+						"value": "@activity('sc_get_time').output.resultSets[0][0].end_time",
 						"type": "Expression"
 					}
 				}
