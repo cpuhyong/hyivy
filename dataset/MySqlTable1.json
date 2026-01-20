@@ -7,7 +7,10 @@
 		},
 		"annotations": [],
 		"type": "MySqlTable",
-		"schema": []
+		"schema": [],
+		"typeProperties": {
+			"tableName": "`activity_info`"
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
