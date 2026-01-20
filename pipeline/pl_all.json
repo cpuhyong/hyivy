@@ -95,6 +95,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_tds",
+						"type": "PipelineReference"
+					},
 					"waitOnCompletion": true
 				}
 			},
@@ -184,6 +188,12 @@
 			"p_PRO_NAME": {
 				"type": "string",
 				"defaultValue": "$ALL$"
+			}
+		},
+		"variables": {
+			"v_task_id": {
+				"type": "Integer",
+				"defaultValue": 0
 			}
 		},
 		"annotations": []
