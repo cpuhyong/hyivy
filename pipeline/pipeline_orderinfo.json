@@ -1,0 +1,144 @@
+{
+	"name": "pipeline_orderinfo",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data sale_order",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "sp_ods_range",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "table_name",
+						"value": "sale_order"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "MySqlTable1",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "sp_start_task",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_start_task]"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sp_ods_range",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sp_start_task",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[ETL_INC_ODS_BOUND]",
+					"storedProcedureParameters": {
+						"p_ETL_ALL": {
+							"value": {
+								"value": "@pipeline().parameters.p_ETL_ALL",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_HSS_NAME": {
+							"value": {
+								"value": "@pipeline().parameters.p_HSS_NAME",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_HSS_OWNER": {
+							"value": {
+								"value": "@pipeline().parameters.p_HSS_OWNER",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_SOURCE_TYPE": {
+							"value": {
+								"value": "@pipeline().parameters.p_SOURCE_TYPE",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"p_ETL_ALL": {
+				"type": "string",
+				"defaultValue": "N"
+			},
+			"p_SOURCE_TYPE": {
+				"type": "string",
+				"defaultValue": "$ALL$"
+			},
+			"p_HSS_OWNER": {
+				"type": "string",
+				"defaultValue": "$ALL$"
+			},
+			"p_HSS_NAME": {
+				"type": "string",
+				"defaultValue": "$ALL$"
+			},
+			"p_PRO_NAME": {
+				"type": "string",
+				"defaultValue": "$ALL$"
+			}
+		},
+		"annotations": []
+	}
+}
