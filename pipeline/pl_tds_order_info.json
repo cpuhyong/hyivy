@@ -1,5 +1,5 @@
 {
-	"name": "pl_sale_order",
+	"name": "pl_tds_order_info",
 	"properties": {
 		"activities": [
 			{
@@ -30,7 +30,7 @@
 						{
 							"parameters": [
 								{
-									"name": "p_tss_name",
+									"name": "p_source_name",
 									"type": "String",
 									"value": {
 										"value": "@variables('v_table_name')",
@@ -40,7 +40,7 @@
 								}
 							],
 							"type": "Query",
-							"text": "select begin_time,end_time,tss_inc_col from current_info_ods where tss_name = @p_tss_name"
+							"text": "select begin_time,end_time,tss_inc_col from current_info_ods where source_table_name = @p_source_name"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
@@ -106,7 +106,7 @@
 				"typeProperties": {
 					"variableName": "v_table_name",
 					"value": {
-						"value": "@substring(pipeline().Pipeline,3,sub(length(pipeline().Pipeline),3))",
+						"value": "@substring(pipeline().Pipeline,7,sub(length(pipeline().Pipeline),7))",
 						"type": "Expression"
 					}
 				}
@@ -231,6 +231,67 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "sp_write_begin_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "@concat('select * from ',variables('v_table_name'),' where ',variables('v_inc_col'),' between ',variables('v_begin_time'),' 00:00:00 and ',variables('v_end_time'),' 00:00:00')",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": "."
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MySqlTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "tds",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"variables": {
