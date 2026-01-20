@@ -1,6 +1,24 @@
 {
 	"name": "pl_tds",
 	"properties": {
+		"activities": [
+			{
+				"name": "exe_pl_tods_order_info",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_tds_order_info",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
 		"annotations": []
 	}
 }
