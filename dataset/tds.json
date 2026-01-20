@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "@variables('v_table_name')",
 				"fileSystem": "tds"
 			},
 			"columnDelimiter": ",",
