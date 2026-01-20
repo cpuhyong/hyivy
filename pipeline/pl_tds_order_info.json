@@ -255,7 +255,7 @@
 					"source": {
 						"type": "MySqlSource",
 						"query": {
-							"value": "@concat('select * from ',variables('v_table_name'),' where ',variables('v_inc_col'),' between ',variables('v_begin_time'),' 00:00:00 and ',variables('v_end_time'),' 00:00:00')",
+							"value": "@concat('select * from ', variables('v_table_name'), ' where ', variables('v_inc_col'), ' between ''', variables('v_begin_time'), ' 00:00:00'' and ''', variables('v_end_time'), ' 00:00:00''')",
 							"type": "Expression"
 						}
 					},
