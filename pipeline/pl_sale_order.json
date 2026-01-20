@@ -189,7 +189,14 @@
 						},
 						"p_log_message": {
 							"value": {
-								"value": "concat('开始抽取',@variables('v_table_name'))",
+								"value": "@concat('开始抽取',variables('v_table_name'),'到TDS')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
 								"type": "Expression"
 							},
 							"type": "String"
