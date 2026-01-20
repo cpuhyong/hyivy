@@ -40,7 +40,7 @@
 								}
 							],
 							"type": "Query",
-							"text": "select begin_time,end_time from current_info_ods where tss_name = @p_tss_name"
+							"text": "select begin_time,end_time,tss_inc_col from current_info_ods where tss_name = @p_tss_name"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
@@ -65,7 +65,7 @@
 				"typeProperties": {
 					"variableName": "v_begin_time",
 					"value": {
-						"value": "@activity('sc_get_time').output.resultSets[0][0].begin_time",
+						"value": "@activity('sc_get_time').output.resultSets[0].rows[0].begin_time",
 						"type": "Expression"
 					}
 				}
@@ -89,7 +89,7 @@
 				"typeProperties": {
 					"variableName": "v_end_time",
 					"value": {
-						"value": "@activity('sc_get_time').output.resultSets[0][0].end_time",
+						"value": "@activity('sc_get_time').output.resultSets[0].rows[0].end_time",
 						"type": "Expression"
 					}
 				}
@@ -110,6 +110,127 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set v_inc_col",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_inc_col",
+					"value": {
+						"value": "@activity('sc_get_time').output.resultSets[0].rows[0].tss_inc_col",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "sp_write_begin_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"enableStaging": false
+				}
+			},
+			{
+				"name": "sp_write_begin_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Set v_inc_col",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_end_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_begin_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": "",
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": "",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set v_runstart_time",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_runstart_time",
+					"value": {
+						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -120,6 +241,12 @@
 				"type": "String"
 			},
 			"v_table_name": {
+				"type": "String"
+			},
+			"v_inc_col": {
+				"type": "String"
+			},
+			"v_runstart_time": {
 				"type": "String"
 			}
 		},
