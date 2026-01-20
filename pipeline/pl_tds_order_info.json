@@ -1,0 +1,30 @@
+{
+	"name": "pl_tds_order_info",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "tb",
+					"value": {
+						"value": "@substring(pipeline().Pipeline,3,sub(3,lastIndexOf(pipeline().Pipeline,pipeline().Pipeline)))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"tb": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
