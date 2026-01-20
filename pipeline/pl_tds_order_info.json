@@ -332,7 +332,7 @@
 						},
 						"p_log_message": {
 							"value": {
-								"value": "@concat('抽取',variables('v_table_name'),'到TDS失败')",
+								"value": "@concat('抽取',variables('v_table_name'),'到TDS成功')",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -390,7 +390,7 @@
 						},
 						"p_log_message": {
 							"value": {
-								"value": "@concat('抽取',variables('v_table_name'),'到TDS成功')",
+								"value": "@concat('抽取',variables('v_table_name'),'到TDS失败')",
 								"type": "Expression"
 							},
 							"type": "String"
