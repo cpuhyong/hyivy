@@ -136,29 +136,6 @@
 				}
 			},
 			{
-				"name": "Copy data",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "sp_write_begin_log",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"enableStaging": false
-				}
-			},
-			{
 				"name": "sp_write_begin_log",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
@@ -179,6 +156,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "Set v_runstart_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"policy": {
@@ -193,19 +176,22 @@
 					"storedProcedureName": "[dbo].[common_write_log]",
 					"storedProcedureParameters": {
 						"p_execute_sec": {
-							"value": "",
+							"value": "0",
 							"type": "Decimal"
 						},
 						"p_indents": {
-							"value": "",
+							"value": "1",
 							"type": "Int32"
 						},
 						"p_log_grade": {
-							"value": "",
+							"value": "一般",
 							"type": "String"
 						},
 						"p_log_message": {
-							"value": "",
+							"value": {
+								"value": "concat('开始抽取',@variables('v_table_name'))",
+								"type": "Expression"
+							},
 							"type": "String"
 						}
 					}
@@ -218,7 +204,14 @@
 			{
 				"name": "Set v_runstart_time",
 				"type": "SetVariable",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "sc_get_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"secureOutput": false,
 					"secureInput": false
