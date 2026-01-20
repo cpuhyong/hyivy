@@ -292,6 +292,122 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "sp_write_success_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "失败",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取',variables('v_table_name'),'到TDS失败')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sp_write_failure_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "成功",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取',variables('v_table_name'),'到TDS成功')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"variables": {
