@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "sc_get_time",
+				"name": "sc_get_var",
 				"type": "Script",
 				"dependsOn": [
 					{
@@ -51,7 +51,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "sc_get_time",
+						"activity": "sc_get_var",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -65,7 +65,7 @@
 				"typeProperties": {
 					"variableName": "v_begin_time",
 					"value": {
-						"value": "@activity('sc_get_time').output.resultSets[0].rows[0].begin_time",
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].begin_time",
 						"type": "Expression"
 					}
 				}
@@ -75,7 +75,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "sc_get_time",
+						"activity": "sc_get_var",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -89,7 +89,7 @@
 				"typeProperties": {
 					"variableName": "v_end_time",
 					"value": {
-						"value": "@activity('sc_get_time').output.resultSets[0].rows[0].end_time",
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].end_time",
 						"type": "Expression"
 					}
 				}
@@ -116,7 +116,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "sc_get_time",
+						"activity": "sc_get_var",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -130,7 +130,7 @@
 				"typeProperties": {
 					"variableName": "v_inc_col",
 					"value": {
-						"value": "@activity('sc_get_time').output.resultSets[0].rows[0].tss_inc_col",
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].tss_inc_col",
 						"type": "Expression"
 					}
 				}
@@ -213,7 +213,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "sc_get_time",
+						"activity": "sc_get_var",
 						"dependencyConditions": [
 							"Succeeded"
 						]
