@@ -1,0 +1,9 @@
+{
+	"name": "adfhyivy",
+	"location": "eastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "780ae4c6-84e3-4569-850c-06ba6aeb978c",
+		"tenantId": "3f811ef3-4cf2-4592-a255-d5782aebcbf1"
+	}
+}

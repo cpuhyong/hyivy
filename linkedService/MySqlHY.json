@@ -1,0 +1,22 @@
+{
+	"name": "MySqlHY",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "MySql",
+		"typeProperties": {
+			"server": "192.168.31.81",
+			"port": "23306",
+			"database": "gmall",
+			"username": "ctl",
+			"sslMode": 1,
+			"useSystemTrustStore": 0,
+			"driverVersion": "v2",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIzNzQ2M2I3MC0wYTU3LTRjMzEtOTk1OS1hZmNjYTNhYmM3YTQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "hyintegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

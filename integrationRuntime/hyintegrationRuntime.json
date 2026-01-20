@@ -1,0 +1,6 @@
+{
+	"name": "hyintegrationRuntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
