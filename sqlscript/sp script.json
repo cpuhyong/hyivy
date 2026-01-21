@@ -1,0 +1,17 @@
+{
+	"name": "sp script",
+	"properties": {
+		"content": {
+			"query": "-- SQL Server 示例\nCREATE PROCEDURE sp_merge_order_info\nAS\nBEGIN\n    MERGE target_table AS target\n    USING source_table AS source\n    ON target.id = source.id\n    WHEN MATCHED THEN\n        UPDATE SET \n            target.name = source.name,\n            target.email = source.email,\n            target.updated_at = GETDATE()\n    WHEN NOT MATCHED THEN\n        INSERT (id, name, email, created_at)\n        VALUES (source.id, source.name, source.email, GETDATE());\nEND",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
