@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@variables('v_table_name')",
+				"fileName": {
+					"value": "@concat('tds_',variables('v_table_name'))",
+					"type": "Expression"
+				},
 				"fileSystem": "tds"
 			},
 			"columnDelimiter": ",",
