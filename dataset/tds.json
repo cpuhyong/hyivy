@@ -1,25 +1,19 @@
 {
-	"name": "tds_old",
+	"name": "tds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
-		"type": "DelimitedText",
+		"type": "Parquet",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@concat('tds_',variables('v_table_name'))",
-					"type": "Expression"
-				},
+				"fileName": "@concat('tds_',variables('v_table_name'))",
 				"fileSystem": "tds"
 			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			"compressionCodec": "snappy"
 		},
 		"schema": []
 	}
