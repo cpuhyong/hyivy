@@ -1,0 +1,151 @@
+{
+	"name": "dataflow_order_info_2",
+	"properties": {
+		"description": "第二种方法用UNION做",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "tds_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sourcetds"
+				},
+				{
+					"dataset": {
+						"referenceName": "ods_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sourceods"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ods_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "union1"
+				},
+				{
+					"name": "window1"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourcetds",
+				"source(output(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourceods",
+				"sourcetds, sourcetds union(byName: true)~> union1",
+				"union1 window(over(id),",
+				"     desc(operate_time, true),",
+				"     rn = rank()) ~> window1",
+				"window1 split(rn==1,",
+				"     disjoint: false) ~> split1@(rn1)",
+				"split1@rn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
