@@ -10,9 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@concat(variables('v_end_time'),'.parquet')",
 				"folderPath": {
-					"value": "@concat('tds_',variables('v_table_name'))",
+					"value": "@concat('tds_',variables('v_table_name'),'/',variables('v_end_time'))",
 					"type": "Expression"
 				},
 				"fileSystem": "tds"
