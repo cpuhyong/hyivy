@@ -1,0 +1,92 @@
+{
+	"name": "dataflow_order_info_3",
+	"properties": {
+		"description": "第三种方法用做exist\ntext\nExistingFile → Exists(连接NewData, 匹配ID) → Conditional Split:\n    分支1: !exists → 保留旧记录\n    分支2: exists → 丢弃（因为会被新记录覆盖）\n\n然后：union(保留的旧记录, 所有新记录) → 输出\n好像不行",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "tds_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sourcetds"
+				},
+				{
+					"dataset": {
+						"referenceName": "ods_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sourceods"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourcetds",
+				"source(output(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourceods"
+			]
+		}
+	}
+}
