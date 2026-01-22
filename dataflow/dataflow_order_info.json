@@ -1,6 +1,7 @@
 {
 	"name": "dataflow_order_info",
 	"properties": {
+		"description": "第一种方法用JOIN+SPLIT+UNION做",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
