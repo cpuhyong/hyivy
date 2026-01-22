@@ -1,0 +1,12 @@
+{
+	"name": "AzureSynapseArtifacts1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSynapseArtifacts",
+		"typeProperties": {
+			"endpoint": "https://asahyivy.dev.azuresynapse.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/a4bac82e-8297-44ed-b88e-c828868c7f7d/resourceGroups/hyivy/providers/Microsoft.Synapse/workspaces/asahyivy"
+		}
+	}
+}
