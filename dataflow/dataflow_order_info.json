@@ -19,7 +19,15 @@
 					"name": "sourceods"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ods_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "join1"
@@ -32,6 +40,12 @@
 				},
 				{
 					"name": "split1"
+				},
+				{
+					"name": "selectold"
+				},
+				{
+					"name": "selectnew"
 				},
 				{
 					"name": "union1"
@@ -102,7 +116,7 @@
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> sourceods",
 				"sourcetds, sourceods join(sourcetds@id == sourceods@id,",
-				"     joinType:'right',",
+				"     joinType:'outer',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1",
@@ -164,7 +178,102 @@
 				"derivedColumn1 split(Record_Action == 'keep_old',",
 				"     Record_Action == 'use_new',",
 				"     disjoint: false) ~> split1@(split1, split2)",
-				"split1@split1, split1@split2 union(byName: false)~> union1"
+				"split1@split1 select(mapColumn(",
+				"          id = old_id,",
+				"          consignee = old_consignee,",
+				"          consignee_tel = old_consignee_tel,",
+				"          total_amount = old_total_amount,",
+				"          order_status = old_order_status,",
+				"          user_id = old_user_id,",
+				"          payment_way = old_payment_way,",
+				"          delivery_address = old_delivery_address,",
+				"          order_comment = old_order_comment,",
+				"          out_trade_no = old_out_trade_no,",
+				"          trade_body = old_trade_body,",
+				"          create_time = old_create_time,",
+				"          operate_time = old_operate_time,",
+				"          expire_time = old_expire_time,",
+				"          process_status = old_process_status,",
+				"          tracking_no = old_tracking_no,",
+				"          parent_order_id = old_parent_order_id,",
+				"          img_url = old_img_url,",
+				"          province_id = old_province_id,",
+				"          activity_reduce_amount = old_activity_reduce_amount,",
+				"          coupon_reduce_amount = old_coupon_reduce_amount,",
+				"          original_total_amount = old_original_total_amount,",
+				"          feight_fee = old_feight_fee,",
+				"          feight_fee_reduce = old_feight_fee_reduce,",
+				"          refundable_time = old_refundable_time,",
+				"          Record_Action",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectold",
+				"split1@split2 select(mapColumn(",
+				"          id = new_id,",
+				"          consignee = new_consignee,",
+				"          consignee_tel = new_consignee_tel,",
+				"          total_amount = new_total_amount,",
+				"          order_status = new_order_status,",
+				"          user_id = new_user_id,",
+				"          payment_way = new_payment_way,",
+				"          delivery_address = new_delivery_address,",
+				"          order_comment = new_order_comment,",
+				"          out_trade_no = new_out_trade_no,",
+				"          trade_body = new_trade_body,",
+				"          create_time = new_create_time,",
+				"          operate_time = new_operate_time,",
+				"          expire_time = new_expire_time,",
+				"          process_status = new_process_status,",
+				"          tracking_no = new_tracking_no,",
+				"          parent_order_id = new_parent_order_id,",
+				"          img_url = new_img_url,",
+				"          province_id = new_province_id,",
+				"          activity_reduce_amount = new_activity_reduce_amount,",
+				"          coupon_reduce_amount = new_coupon_reduce_amount,",
+				"          original_total_amount = new_original_total_amount,",
+				"          feight_fee = new_feight_fee,",
+				"          feight_fee_reduce = new_feight_fee_reduce,",
+				"          refundable_time = new_refundable_time,",
+				"          Record_Action",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectnew",
+				"selectold, selectnew union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
