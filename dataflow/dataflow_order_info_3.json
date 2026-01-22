@@ -20,8 +20,23 @@
 					"name": "sourceods"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ods_order_info",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "exists1"
+				},
+				{
+					"name": "union1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id as long,",
@@ -85,7 +100,46 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> sourceods"
+				"     format: 'parquet') ~> sourceods",
+				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1, sourcetds union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
