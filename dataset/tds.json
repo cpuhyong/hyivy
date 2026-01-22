@@ -10,10 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": {
-					"value": "@concat('tds_',variables('v_table_name'),'/',variables('v_end_time'))",
-					"type": "Expression"
-				},
+				"fileName": "@concat(variables('v_end_time'),'.parquet')",
+				"folderPath": "@concat('tds_',variables('v_table_name'))",
 				"fileSystem": "tds"
 			},
 			"compressionCodec": "snappy"
