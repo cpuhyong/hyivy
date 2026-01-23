@@ -135,8 +135,8 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: ['rm -r -f /tds/tds_order_info/*'],",
+				"     preCommands: ['hadoop fs -rm -r -f ${sink().output}*'],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     saveOrder: 1) ~> sink1"
