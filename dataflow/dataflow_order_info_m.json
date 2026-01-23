@@ -135,7 +135,7 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: ['mkdir -p /bbbbb'],",
+				"     preCommands: ['mkdir -p ../bbbbb'],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
