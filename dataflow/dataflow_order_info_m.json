@@ -135,7 +135,7 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: ['rm -r ${sink().output}*'],",
+				"     preCommands: ['rm -r /ods/ods_order_info/*'],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
