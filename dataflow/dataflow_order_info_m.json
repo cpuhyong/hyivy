@@ -71,7 +71,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     moveFiles: ['/tds_order_info',($current_day)],",
+				"     moveFiles: ['/tds_order_info','old'],",
 				"     format: 'parquet') ~> sourcetds",
 				"source(output(",
 				"          id as long,",
