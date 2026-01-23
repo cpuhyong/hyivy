@@ -101,7 +101,6 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     moveFiles: ['/ods_order_info','old'],",
-				"     modifiedBefore: (toTimestamp(1769205600000L)),",
 				"     format: 'parquet') ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
 				"     negate:true,",
