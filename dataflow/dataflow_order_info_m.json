@@ -135,7 +135,7 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: ['mkdir aaa'],",
+				"     preCommands: ['mkdir -p aaa'],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
