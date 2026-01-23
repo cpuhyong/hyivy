@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "2026-01-20.parquet",
 				"folderPath": "tds_order_info",
 				"fileSystem": "tds"
 			},
