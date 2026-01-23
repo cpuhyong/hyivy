@@ -104,7 +104,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     moveFiles: ['/ods_order_info','old'],",
-				"     modifiedBefore: (toTimestamp($p_start_time)),",
+				"     modifiedBefore: (toTimestamp('2026-01-23T22:16:05.4902307Z')),",
 				"     format: 'parquet') ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
 				"     negate:true,",
