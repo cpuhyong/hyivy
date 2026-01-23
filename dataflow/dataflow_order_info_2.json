@@ -1,7 +1,7 @@
 {
 	"name": "dataflow_order_info_2",
 	"properties": {
-		"description": "第二种方法用UNION做",
+		"description": "第二种方法用UNION做\n不是UNION ALL，结果只是并集",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -37,7 +37,7 @@
 					"name": "window1"
 				},
 				{
-					"name": "split1"
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -109,9 +109,8 @@
 				"union1 window(over(id),",
 				"     desc(operate_time, true),",
 				"     rn = rowNumber()) ~> window1",
-				"window1 split(rn==1,",
-				"     disjoint: false) ~> split1@(rn1)",
-				"split1@rn1 sink(allowSchemaDrift: true,",
+				"window1 filter(rn==1) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     truncate: true,",
