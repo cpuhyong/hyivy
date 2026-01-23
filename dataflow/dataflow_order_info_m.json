@@ -38,9 +38,6 @@
 				}
 			],
 			"scriptLines": [
-				"parameters{",
-				"     current_day as string (currentDate())",
-				"}",
 				"source(output(",
 				"          id as long,",
 				"          consignee as string,",
