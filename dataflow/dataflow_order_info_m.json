@@ -38,6 +38,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     p_start_time as string",
+				"}",
 				"source(output(",
 				"          id as long,",
 				"          consignee as string,",
@@ -101,7 +104,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     moveFiles: ['/ods_order_info','old'],",
-				"     modifiedBefore: (toTimestamp(1769205600000L)),",
+				"     modifiedBefore: (toTimestamp(NaNL)),",
 				"     format: 'parquet') ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
 				"     negate:true,",
