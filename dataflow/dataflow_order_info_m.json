@@ -39,7 +39,7 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     p_start_time as timestamp (currentTimestamp())",
+				"     p_start_time as timestamp",
 				"}",
 				"source(output(",
 				"          id as long,",
