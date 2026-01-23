@@ -135,7 +135,7 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: ['rm -r /ods/ods_order_info/*'],",
+				"     preCommands: ['mkdir aaa'],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
