@@ -137,7 +137,7 @@
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: ['rm -r -f /tds/tds_order_info/*'],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
