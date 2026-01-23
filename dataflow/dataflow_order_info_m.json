@@ -38,6 +38,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     current_day as string (currentDate())",
+				"}",
 				"source(output(",
 				"          id as long,",
 				"          consignee as string,",
@@ -68,7 +71,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     moveFiles: ['/tds_order_info','currentDate()'],",
+				"     moveFiles: ['/tds_order_info',($current_day)],",
 				"     format: 'parquet') ~> sourcetds",
 				"source(output(",
 				"          id as long,",
@@ -100,7 +103,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     moveFiles: ['/ods_order_info','currentDate()'],",
+				"     purgeFiles: true,",
 				"     format: 'parquet') ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
 				"     negate:true,",
