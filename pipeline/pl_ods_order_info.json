@@ -413,7 +413,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow_order_info_3",
+						"referenceName": "dataflow_order_info_m",
 						"type": "DataFlowReference"
 					},
 					"compute": {
