@@ -227,7 +227,7 @@
 				"typeProperties": {
 					"variableName": "v_runstart_time",
 					"value": {
-						"value": "@utcNow()",
+						"value": "@convertFromUtc(utcNow(), 'China Standard Time')",
 						"type": "Expression"
 					}
 				}
