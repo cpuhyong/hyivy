@@ -135,7 +135,7 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: ['rm -r -f ${sink().output}*'],",
+				"     preCommands: ['rm -r ${sink().output}*'],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
