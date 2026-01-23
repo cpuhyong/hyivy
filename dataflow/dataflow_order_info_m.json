@@ -72,7 +72,6 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     moveFiles: ['/tds_order_info','old'],",
-				"     modifiedBefore: (toTimestamp(NaNL)),",
 				"     format: 'parquet') ~> sourcetds",
 				"source(output(",
 				"          id as long,",
