@@ -414,7 +414,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "dataflow_order_info_m",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"p_start_time": {
+								"value": "'@{variables('v_runstart_time')}'",
+								"type": "Expression"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
