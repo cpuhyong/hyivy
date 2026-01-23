@@ -1,7 +1,7 @@
 {
 	"name": "dataflow_order_info_3",
 	"properties": {
-		"description": "第三种方法用做exist\ntext\nExistingFile → Exists(连接NewData, 匹配ID) → Conditional Split:\n    分支1: !exists → 保留旧记录\n    分支2: exists → 丢弃（因为会被新记录覆盖）\n\n然后：union(保留的旧记录, 所有新记录) → 输出\n好像不行",
+		"description": "第三种方法用做exist，union最优，\n采用",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
