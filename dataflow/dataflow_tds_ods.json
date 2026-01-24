@@ -117,7 +117,7 @@
 				"union1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
-				"     filePattern:(concat( $p_ods_table, '/')),",
+				"     filePattern:(concat( $p_ods_table, '/ ',substring($p_start_time,1,10)，'-{INCREMENTAL_ID}.parquet')),",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
