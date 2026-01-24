@@ -136,7 +136,7 @@
 				"     ),",
 				"     format: 'parquet',",
 				"     umask: 0022,",
-				"     preCommands: ['mv -f /ods_order_info/* /old/'],",
+				"     preCommands: ['mv /ods_order_info/* /old/'],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
