@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "exe_pl_tods_order_info",
+				"name": "exe_pl_tds_order_info",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"policy": {
@@ -13,6 +13,29 @@
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "pl_tds_order_info",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "exe_pl_ods_order_info",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "exe_pl_tds_order_info",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_ods_order_info",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
