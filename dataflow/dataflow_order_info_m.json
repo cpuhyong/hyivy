@@ -111,7 +111,7 @@
 				"     format: 'parquet',",
 				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: ['mv -r * /ods_order_info/'],",
+				"     postCommands: ['mv * /ods_order_info/'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     saveOrder: 1) ~> sink1"
