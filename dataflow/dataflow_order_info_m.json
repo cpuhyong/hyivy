@@ -42,7 +42,7 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     p_start_time as string ('2026-01-24T06:20:05.4902307Z')",
+				"     p_start_time as string ('2026-01-24 06:20:05')",
 				"}",
 				"source(output(",
 				"          id as long,",
@@ -112,7 +112,7 @@
 				"     negate:true,",
 				"     broadcast: 'auto')~> exists1",
 				"exists1, sourcetds union(byName: true)~> union1",
-				"union1 derive(ttt = toTimestamp($p_start_time,'yyyy-MM-dd\\'T\\'HH:mm:ss.fffffff\\'Z\\'')) ~> derivedColumn1",
+				"union1 derive(ttt = toTimestamp($p_start_time,'yyyy-MM-dd HH:mm:ss')) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
