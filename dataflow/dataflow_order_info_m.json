@@ -104,6 +104,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     purgeFiles: true,",
+				"     modifiedBefore: (toTimestamp($p_start_time)),",
 				"     format: 'parquet') ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
 				"     negate:true,",
