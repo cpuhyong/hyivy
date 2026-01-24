@@ -96,28 +96,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "pl_tds",
+						"referenceName": "pl_tds_ods",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "Execute Pipeline ods",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "Execute Pipeline tds",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
 					"waitOnCompletion": true
 				}
 			},
@@ -126,7 +107,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Execute Pipeline ods",
+						"activity": "Execute Pipeline tds",
 						"dependencyConditions": [
 							"Succeeded"
 						]
