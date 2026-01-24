@@ -80,7 +80,6 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     purgeFiles: true,",
-				"     modifiedBefore: (toTimestamp($p_start_time,'yyyy-MM-dd HH:mm:ss')),",
 				"     format: 'parquet',",
 				"     wildcardPaths:[(concat( $p_ods_table, '/*.parquet'))]) ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
