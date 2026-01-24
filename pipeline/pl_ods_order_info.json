@@ -256,7 +256,7 @@
 					"storedProcedureParameters": {
 						"p_execute_sec": {
 							"value": {
-								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
+								"value": "@div(sub(ticks(formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')), ticks(variables('v_runstart_time'))), 10000000)",
 								"type": "Expression"
 							},
 							"type": "Decimal"
@@ -314,7 +314,7 @@
 					"storedProcedureParameters": {
 						"p_execute_sec": {
 							"value": {
-								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
+								"value": "@div(sub(ticks(formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')), ticks(variables('v_runstart_time'))), 10000000)",
 								"type": "Expression"
 							},
 							"type": "Decimal"
