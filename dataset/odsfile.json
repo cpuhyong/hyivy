@@ -1,5 +1,5 @@
 {
-	"name": "odstemp",
+	"name": "odsfile",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "temp",
 				"fileSystem": "ods"
 			},
 			"compressionCodec": "snappy"
