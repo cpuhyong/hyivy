@@ -35,9 +35,6 @@
 				},
 				{
 					"name": "union1"
-				},
-				{
-					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -113,8 +110,7 @@
 				"     negate:true,",
 				"     broadcast: 'auto')~> exists1",
 				"exists1, sourcetds union(byName: true)~> union1",
-				"union1 derive(ttt = toTimestamp($p_start_time,'yyyy-MM-dd HH:mm:ss')) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"union1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          id as long,",
