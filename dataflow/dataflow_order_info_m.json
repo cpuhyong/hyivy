@@ -42,7 +42,7 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     p_start_time as string",
+				"     p_start_time as string (1/24/2026, 2:20:00 PM)",
 				"}",
 				"source(output(",
 				"          id as long,",
