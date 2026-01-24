@@ -118,6 +118,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"pipeline": {
+						"referenceName": "test",
+						"type": "PipelineReference"
+					},
 					"waitOnCompletion": true
 				}
 			},
