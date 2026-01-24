@@ -75,7 +75,7 @@
 				"     ignoreNoFilesFound: false,",
 				"     purgeFiles: true,",
 				"     format: 'parquet',",
-				"     wildcardPaths:[(concat('tds/', $p_tds_talbe, '/*.parquet'))]) ~> sourcetds",
+				"     wildcardPaths:[(concat( $p_tds_talbe, '/*.parquet'))]) ~> sourcetds",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
