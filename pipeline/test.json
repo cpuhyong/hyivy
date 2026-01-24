@@ -1,0 +1,36 @@
+{
+	"name": "test",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "test",
+					"value": {
+						"value": "@formatDateTime(addDays(pipeline().parameters.day, -1), 'yyyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"day": {
+				"type": "string",
+				"defaultValue": "2026-01-01"
+			}
+		},
+		"variables": {
+			"test": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
