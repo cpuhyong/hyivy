@@ -413,13 +413,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow_order_info_m",
+						"referenceName": "dataflow_tds_ods",
 						"type": "DataFlowReference",
 						"parameters": {
-							"p_start_time": {
-								"value": "'@{variables('v_runstart_time')}'",
-								"type": "Expression"
-							}
+							"p_start_time": "'2026-01-24 06:20:05'"
 						}
 					},
 					"compute": {
