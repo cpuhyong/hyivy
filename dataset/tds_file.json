@@ -10,6 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "$p_tds_talbe",
+					"type": "Expression"
+				},
 				"fileSystem": "tds"
 			},
 			"compressionCodec": "snappy"
