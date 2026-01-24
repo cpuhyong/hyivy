@@ -105,7 +105,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
+				"     ignoreNoFilesFound: true,",
 				"     purgeFiles: true,",
 				"     modifiedBefore: (toTimestamp($p_start_time,'yyyy-MM-dd HH:mm:ss')),",
 				"     format: 'parquet',",
