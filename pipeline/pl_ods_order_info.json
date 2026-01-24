@@ -227,7 +227,7 @@
 				"typeProperties": {
 					"variableName": "v_runstart_time",
 					"value": {
-						"value": "@convertFromUtc(utcNow(), 'China Standard Time')",
+						"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')",
 						"type": "Expression"
 					}
 				}
@@ -256,7 +256,7 @@
 					"storedProcedureParameters": {
 						"p_execute_sec": {
 							"value": {
-								"value": "@div(sub(ticks(convertFromUtc(utcNow(), 'China Standard Time')), ticks(variables('v_runstart_time'))), 10000000)",
+								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
 								"type": "Expression"
 							},
 							"type": "Decimal"
@@ -314,7 +314,7 @@
 					"storedProcedureParameters": {
 						"p_execute_sec": {
 							"value": {
-								"value": "@div(sub(ticks(convertFromUtc(utcNow(), 'China Standard Time')), ticks(variables('v_runstart_time'))), 10000000)",
+								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
 								"type": "Expression"
 							},
 							"type": "Decimal"
@@ -417,7 +417,7 @@
 						"type": "DataFlowReference",
 						"parameters": {
 							"p_start_time": {
-								"value": "'@{pipeline().parameters.p_time}'",
+								"value": "'@{variables('v_runstart_time')}'",
 								"type": "Expression"
 							}
 						}
@@ -430,12 +430,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"p_time": {
-				"type": "string",
-				"defaultValue": "1/24/2026, 2:20:00 PM"
-			}
-		},
 		"variables": {
 			"v_begin_time": {
 				"type": "String"
