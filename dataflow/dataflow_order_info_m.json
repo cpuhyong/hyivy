@@ -38,6 +38,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     p_start_time as string",
+				"}",
 				"source(output(",
 				"          id as long,",
 				"          consignee as string,",
