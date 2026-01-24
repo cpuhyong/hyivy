@@ -416,7 +416,18 @@
 						"referenceName": "dataflow_tds_ods",
 						"type": "DataFlowReference",
 						"parameters": {
-							"p_start_time": "'2026-01-24 06:20:05'"
+							"p_start_time": {
+								"value": "'@{variables('v_runstart_time')}'",
+								"type": "Expression"
+							},
+							"p_tds_talbe": {
+								"value": "'@{concat('tds_',variables('v_table_name'))}'",
+								"type": "Expression"
+							},
+							"p_ods_table": {
+								"value": "'@{concat('ods_',variables('v_table_name'))}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
