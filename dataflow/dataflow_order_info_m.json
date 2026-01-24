@@ -35,6 +35,9 @@
 				},
 				{
 					"name": "union1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -104,13 +107,13 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     purgeFiles: true,",
-				"     modifiedBefore: (toTimestamp($p_start_time)),",
 				"     format: 'parquet') ~> sourceods",
 				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
 				"     negate:true,",
 				"     broadcast: 'auto')~> exists1",
 				"exists1, sourcetds union(byName: true)~> union1",
-				"union1 sink(allowSchemaDrift: true,",
+				"union1 derive(ttt = $p_start_time) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          id as long,",
