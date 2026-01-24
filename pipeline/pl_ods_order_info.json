@@ -414,7 +414,13 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "dataflow_order_info_m",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"parameters": {
+							"p_start_time": {
+								"value": "'@{pipeline().parameters.p_time}'",
+								"type": "Expression"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
@@ -424,6 +430,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"p_time": {
+				"type": "string",
+				"defaultValue": "1/24/2026, 2:20:00 PM"
+			}
+		},
 		"variables": {
 			"v_begin_time": {
 				"type": "String"
