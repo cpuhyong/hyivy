@@ -815,7 +815,7 @@
 				"typeProperties": {
 					"variableName": "v_dw_inc_min_date",
 					"value": {
-						"value": "@string(min(activity('Lookupmindate').output.value.[11]))",
+						"value": "@string(min(activity('Lookupmindate').output.value[0].create_time))",
 						"type": "Expression"
 					}
 				}
