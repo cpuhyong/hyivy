@@ -392,18 +392,18 @@
 								},
 								{
 									"name": "p_dw_inc_min_date",
-									"type": "Datetime",
+									"type": "String",
 									"value": {
-										"value": "@formatDateTime(variables('v_dw_inc_min_date'),'yyyy-MM-dd HH:mm:ss')",
+										"value": "@variables('v_dw_inc_min_date')",
 										"type": "Expression"
 									},
 									"direction": "Input"
 								},
 								{
 									"name": "p_dw_inc_max_date",
-									"type": "Datetime",
+									"type": "String",
 									"value": {
-										"value": "@formatDateTime(variables('v_dw_inc_max_date'),'yyyy-MM-dd HH:mm:ss')",
+										"value": "@variables('v_dw_inc_max_date')",
 										"type": "Expression"
 									},
 									"direction": "Input"
@@ -474,7 +474,7 @@
 				"typeProperties": {
 					"variableName": "v_dw_inc_min_date",
 					"value": {
-						"value": "@string(activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_time)\n",
+						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_time\n",
 						"type": "Expression"
 					}
 				}
@@ -498,7 +498,7 @@
 				"typeProperties": {
 					"variableName": "v_dw_inc_max_date",
 					"value": {
-						"value": "@string(activity('df_tds_ods').output.runStatus.output.sink2.value[0].max_time)",
+						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].max_time",
 						"type": "Expression"
 					}
 				}
