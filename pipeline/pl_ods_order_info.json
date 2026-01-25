@@ -413,21 +413,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow_tds_ods",
+						"referenceName": "dataflow_tds_ods_0125",
 						"type": "DataFlowReference",
 						"parameters": {
-							"p_start_time": {
-								"value": "'@{variables('v_runstart_time')}'",
-								"type": "Expression"
-							},
-							"p_tds_talbe": {
-								"value": "'@{concat('tds_',variables('v_table_name'))}'",
-								"type": "Expression"
-							},
-							"p_ods_table": {
-								"value": "'@{concat('ods_',variables('v_table_name'))}'",
-								"type": "Expression"
-							}
+							"p_start_time": "'2026-01-24 06:20:05'",
+							"p_tds_talbe": "'tds_order_info'",
+							"p_ods_table": "'ods_order_info'"
 						}
 					},
 					"compute": {
@@ -435,6 +426,30 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Set variable minmaxdate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "df_tds_ods",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dw_inc_min_date",
+					"value": {
+						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_create_time\n",
+						"type": "Expression"
+					}
 				}
 			}
 		],
@@ -452,6 +467,12 @@
 				"type": "String"
 			},
 			"v_runstart_time": {
+				"type": "String"
+			},
+			"v_dw_inc_min_date": {
+				"type": "String"
+			},
+			"v_dw_inc_max_date": {
 				"type": "String"
 			}
 		},
