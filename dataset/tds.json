@@ -18,6 +18,119 @@
 			},
 			"compressionCodec": "snappy"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "id",
+				"type": "INT64"
+			},
+			{
+				"name": "consignee",
+				"type": "UTF8"
+			},
+			{
+				"name": "consignee_tel",
+				"type": "UTF8"
+			},
+			{
+				"name": "total_amount",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "order_status",
+				"type": "UTF8"
+			},
+			{
+				"name": "user_id",
+				"type": "INT64"
+			},
+			{
+				"name": "payment_way",
+				"type": "UTF8"
+			},
+			{
+				"name": "delivery_address",
+				"type": "UTF8"
+			},
+			{
+				"name": "order_comment",
+				"type": "UTF8"
+			},
+			{
+				"name": "out_trade_no",
+				"type": "UTF8"
+			},
+			{
+				"name": "trade_body",
+				"type": "UTF8"
+			},
+			{
+				"name": "create_time",
+				"type": "INT96"
+			},
+			{
+				"name": "operate_time",
+				"type": "INT96"
+			},
+			{
+				"name": "expire_time",
+				"type": "INT96"
+			},
+			{
+				"name": "process_status",
+				"type": "UTF8"
+			},
+			{
+				"name": "tracking_no",
+				"type": "UTF8"
+			},
+			{
+				"name": "parent_order_id",
+				"type": "INT64"
+			},
+			{
+				"name": "img_url",
+				"type": "UTF8"
+			},
+			{
+				"name": "province_id",
+				"type": "INT32"
+			},
+			{
+				"name": "activity_reduce_amount",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "coupon_reduce_amount",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "original_total_amount",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "feight_fee",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "feight_fee_reduce",
+				"type": "DECIMAL",
+				"precision": 38,
+				"scale": 18
+			},
+			{
+				"name": "refundable_time",
+				"type": "INT96"
+			}
+		]
 	}
 }
