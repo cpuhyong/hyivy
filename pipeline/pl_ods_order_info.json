@@ -432,7 +432,7 @@
 				}
 			},
 			{
-				"name": "Set variable minmaxdate",
+				"name": "Set variable mindate",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -450,7 +450,31 @@
 				"typeProperties": {
 					"variableName": "v_dw_inc_min_date",
 					"value": {
-						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_time\n",
+						"value": "@string(activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_time)\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable maxdate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "df_tds_ods",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dw_inc_max_date",
+					"value": {
+						"value": "@string(activity('df_tds_ods').output.runStatus.output.sink2.value[0].max_time)",
 						"type": "Expression"
 					}
 				}
