@@ -778,6 +778,11 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat('tds_',variables('v_table_name'))",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -810,7 +815,7 @@
 				"typeProperties": {
 					"variableName": "v_dw_inc_min_date",
 					"value": {
-						"value": "@string(min(activity('Lookupmindate').output.value.create_time))",
+						"value": "@string(min(activity('Lookupmindate').output.value.[11]))",
 						"type": "Expression"
 					}
 				}
