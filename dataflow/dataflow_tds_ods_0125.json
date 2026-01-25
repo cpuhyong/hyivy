@@ -1,0 +1,146 @@
+{
+	"name": "dataflow_tds_ods_0125",
+	"properties": {
+		"description": "第三种方法用做exist，union最优，\n采用做模版，加入minmaxdate",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "tds_file",
+						"type": "DatasetReference"
+					},
+					"name": "sourcetds"
+				},
+				{
+					"dataset": {
+						"referenceName": "odsfile",
+						"type": "DatasetReference"
+					},
+					"name": "sourceods"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "odsfile",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "exists1"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "aggregate",
+					"description": "添加聚合列，取MINMAXDATE"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     p_start_time as string ('2026-01-24 06:20:05'),",
+				"     p_tds_talbe as string ('tds_order_info'),",
+				"     p_ods_table as string ('ods_order_info')",
+				"}",
+				"source(output(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
+				"     format: 'parquet',",
+				"     wildcardPaths:[(concat( $p_tds_talbe, '/*.parquet'))]) ~> sourcetds",
+				"source(output(",
+				"          id as long,",
+				"          consignee as string,",
+				"          consignee_tel as string,",
+				"          total_amount as decimal(38,18),",
+				"          order_status as string,",
+				"          user_id as long,",
+				"          payment_way as string,",
+				"          delivery_address as string,",
+				"          order_comment as string,",
+				"          out_trade_no as string,",
+				"          trade_body as string,",
+				"          create_time as timestamp,",
+				"          operate_time as timestamp,",
+				"          expire_time as timestamp,",
+				"          process_status as string,",
+				"          tracking_no as string,",
+				"          parent_order_id as long,",
+				"          img_url as string,",
+				"          province_id as integer,",
+				"          activity_reduce_amount as decimal(38,18),",
+				"          coupon_reduce_amount as decimal(38,18),",
+				"          original_total_amount as decimal(38,18),",
+				"          feight_fee as decimal(38,18),",
+				"          feight_fee_reduce as decimal(38,18),",
+				"          refundable_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: true,",
+				"     purgeFiles: true,",
+				"     modifiedBefore: (toTimestamp($p_start_time,'yyyy-MM-dd HH:mm:ss')),",
+				"     format: 'parquet',",
+				"     wildcardPaths:[(concat( $p_ods_table, '/*.parquet'))]) ~> sourceods",
+				"sourceods, sourcetds exists(sourceods@id == sourcetds@id,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1, sourcetds union(byName: true)~> union1",
+				"sourcetds aggregate(min_create_time = min(create_time),",
+				"          max_create_time = max(create_time)) ~> aggregate",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     filePattern:(concat( $p_ods_table, '/ ',substring($p_start_time,1,10),'.parquet')),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> sink1",
+				"aggregate sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink2"
+			]
+		}
+	}
+}
