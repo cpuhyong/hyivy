@@ -389,10 +389,28 @@
 										"type": "Expression"
 									},
 									"direction": "Input"
+								},
+								{
+									"name": "p_dw_inc_min_date",
+									"type": "Datetime",
+									"value": {
+										"value": "@formatDateTime(variables('v_dw_inc_min_date'),'yyyy-MM-dd HH:mm:ss')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								},
+								{
+									"name": "p_dw_inc_max_date",
+									"type": "Datetime",
+									"value": {
+										"value": "@formatDateTime(variables('v_dw_inc_max_date'),'yyyy-MM-dd HH:mm:ss')",
+										"type": "Expression"
+									},
+									"direction": "Input"
 								}
 							],
 							"type": "NonQuery",
-							"text": "update current_info_ods\nset hss_succeed_flag = 'Y' ,dw_inc_min_date = @v_dw_inc_min_date,dw_inc_max_date = @v_dw_inc_max_date\nwhere source_table_name =@p_source_name"
+							"text": "update current_info_ods\nset hss_succeed_flag = 'Y' ,dw_inc_min_date = @p_dw_inc_min_date,dw_inc_max_date = @p_dw_inc_max_date\nwhere source_table_name =@p_source_name"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
