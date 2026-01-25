@@ -353,7 +353,13 @@
 				"type": "Script",
 				"dependsOn": [
 					{
-						"activity": "df_tds_ods",
+						"activity": "Set variable mindate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set variable maxdate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -386,7 +392,7 @@
 								}
 							],
 							"type": "NonQuery",
-							"text": "update current_info_ods\nset hss_succeed_flag = 'Y'\nwhere source_table_name =@p_source_name"
+							"text": "update current_info_ods\nset hss_succeed_flag = 'Y' ,dw_inc_min_date = @v_dw_inc_min_date,dw_inc_max_date = @v_dw_inc_max_date\nwhere source_table_name =@p_source_name"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
@@ -413,7 +419,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow_tds_ods_0125",
+						"referenceName": "dataflow_tds_ods",
 						"type": "DataFlowReference",
 						"parameters": {
 							"p_start_time": "'2026-01-24 06:20:05'",
