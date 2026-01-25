@@ -425,7 +425,10 @@
 						"coreCount": 8,
 						"computeType": "General"
 					},
-					"traceLevel": "Fine"
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
 				}
 			},
 			{
@@ -447,7 +450,7 @@
 				"typeProperties": {
 					"variableName": "v_dw_inc_min_date",
 					"value": {
-						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_create_time\n",
+						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_time\n",
 						"type": "Expression"
 					}
 				}
