@@ -1,5 +1,5 @@
 {
-	"name": "dataflow_tds_ods_0125",
+	"name": "dataflow_tds_ods",
 	"properties": {
 		"description": "第三种方法用做exist，union最优，\n采用做模版，加入minmaxdate",
 		"type": "MappingDataFlow",
