@@ -271,68 +271,6 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "id",
-									"type": "Int64",
-									"physicalType": "Int64"
-								},
-								"sink": {
-									"name": "id",
-									"type": "Int64",
-									"physicalType": "INT_64"
-								}
-							},
-							{
-								"source": {
-									"name": "name",
-									"type": "String",
-									"physicalType": "VarChar"
-								},
-								"sink": {
-									"name": "name",
-									"type": "String",
-									"physicalType": "UTF8"
-								}
-							},
-							{
-								"source": {
-									"name": "category1_id",
-									"type": "Int64",
-									"physicalType": "Int64"
-								},
-								"sink": {
-									"name": "category1_id",
-									"type": "Int64",
-									"physicalType": "INT_64"
-								}
-							},
-							{
-								"source": {
-									"name": "create_time",
-									"type": "DateTime",
-									"physicalType": "DateTime"
-								},
-								"sink": {
-									"name": "create_time",
-									"type": "DateTime",
-									"physicalType": "INT_96"
-								}
-							},
-							{
-								"source": {
-									"name": "operate_time",
-									"type": "DateTime",
-									"physicalType": "DateTime"
-								},
-								"sink": {
-									"name": "operate_time",
-									"type": "DateTime",
-									"physicalType": "INT_96"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
