@@ -506,7 +506,7 @@
 				"typeProperties": {
 					"variableName": "v_task_id",
 					"value": {
-						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].etl_task_id",
+						"value": "@string(activity('sc_get_var').output.resultSets[0].rows[0].etl_task_id)",
 						"type": "Expression"
 					}
 				}
