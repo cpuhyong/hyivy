@@ -80,7 +80,7 @@
 				}
 			},
 			{
-				"name": "Execute Pipeline tds",
+				"name": "Execute Pipeline sales",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -103,11 +103,17 @@
 				}
 			},
 			{
-				"name": "Execute Pipeline dw",
+				"name": "Execute Pipeline dwd",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "Execute Pipeline tds",
+						"activity": "Execute Pipeline sales",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Execute Pipeline dim",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -130,7 +136,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Execute Pipeline dw",
+						"activity": "Execute Pipeline dwd",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -150,6 +156,29 @@
 				"linkedServiceName": {
 					"referenceName": "AzureSqlDatabase1",
 					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Execute Pipeline dim",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "sp_ods_range",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_dim",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
 				}
 			}
 		],
