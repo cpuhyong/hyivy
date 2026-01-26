@@ -1,0 +1,12 @@
+{
+	"name": "AzureDatabricks1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-7405605714636163.3.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/a4bac82e-8297-44ed-b88e-c828868c7f7d/resourceGroups/hyivy/providers/Microsoft.Databricks/workspaces/adhyivy"
+		}
+	}
+}
