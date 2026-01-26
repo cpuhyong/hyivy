@@ -96,7 +96,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "pl_tds_ods",
+						"referenceName": "pl_fact_sales",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
