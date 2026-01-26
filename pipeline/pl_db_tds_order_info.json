@@ -1,5 +1,5 @@
 {
-	"name": "pl_tds_order_info",
+	"name": "pl_db_tds_order_info",
 	"properties": {
 		"activities": [
 			{
@@ -40,7 +40,7 @@
 								}
 							],
 							"type": "Query",
-							"text": "select begin_time,end_time,tss_inc_col,source_db from current_info_ods where source_table_name = @p_source_name"
+							"text": "select begin_time,end_time,tss_inc_col,source_db,etl_task_id from current_info_ods where source_table_name = @p_source_name"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
@@ -164,7 +164,13 @@
 						]
 					},
 					{
-						"activity": "Set variable1",
+						"activity": "Set  v_source_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_task_id",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -458,7 +464,7 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set  v_source_db",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -477,6 +483,30 @@
 					"variableName": "v_source_db",
 					"value": {
 						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].source_db",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_task_id",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_task_id",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].etl_task_id",
 						"type": "Expression"
 					}
 				}
@@ -505,6 +535,9 @@
 				"type": "String"
 			},
 			"v_source_db": {
+				"type": "String"
+			},
+			"v_task_id": {
 				"type": "String"
 			}
 		},
