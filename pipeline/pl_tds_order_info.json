@@ -1,5 +1,5 @@
 {
-	"name": "pl_tds_order_info_databricks",
+	"name": "pl_tds_order_info",
 	"properties": {
 		"activities": [
 			{

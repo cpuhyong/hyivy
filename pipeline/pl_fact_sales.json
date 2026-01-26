@@ -12,7 +12,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "pl_tds_order_info",
+						"referenceName": "pl_tds_order_info_0126fordatabrcick",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
