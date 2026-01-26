@@ -53,8 +53,6 @@
 			{
 				"name": "Execute Pipeline4",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -71,8 +69,6 @@
 			{
 				"name": "Execute Pipeline5",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -89,8 +85,6 @@
 			{
 				"name": "Execute Pipeline6",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -107,8 +101,6 @@
 			{
 				"name": "Execute Pipeline7",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -125,8 +117,6 @@
 			{
 				"name": "Execute Pipeline8",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
@@ -157,7 +147,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "pl_ods_base_category1",
+						"referenceName": "pl_tds_base_category1",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
@@ -317,8 +307,6 @@
 			{
 				"name": "Execute Pipeline17",
 				"type": "ExecutePipeline",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"secureInput": false
