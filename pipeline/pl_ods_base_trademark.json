@@ -1,0 +1,532 @@
+{
+	"name": "pl_ods_base_trademark",
+	"properties": {
+		"activities": [
+			{
+				"name": "sc_get_var",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Set v_table_name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "p_source_name",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_table_name')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
+							"type": "Query",
+							"text": "select begin_time,end_time,tss_inc_col from current_info_ods where source_table_name = @p_source_name"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Set v_begin_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_begin_time",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].begin_time",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_end_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_end_time",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].end_time",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_table_name",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_table_name",
+					"value": {
+						"value": "@substring(pipeline().Pipeline,7,sub(length(pipeline().Pipeline),7))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_inc_col",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_inc_col",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].tss_inc_col",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "sp_write_begin_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Set v_inc_col",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_end_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_begin_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_runstart_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": "0",
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "一般",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('开始抽取 tds_',variables('v_table_name'),'到ODS')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set v_runstart_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_runstart_time",
+					"value": {
+						"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "sp_write_success_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sc_update_flag",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "成功",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取 tds_',variables('v_table_name'),'到ODS成功')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sp_write_failure_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "df_tds_ods",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "失败",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取 tds_',variables('v_table_name'),'到ODS失败')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sc_update_flag",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Set variable mindate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set variable maxdate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "p_source_name",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_table_name')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								},
+								{
+									"name": "p_dw_inc_min_date",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_dw_inc_min_date')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								},
+								{
+									"name": "p_dw_inc_max_date",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_dw_inc_max_date')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
+							"type": "NonQuery",
+							"text": "update current_info_ods\nset hss_succeed_flag = 'Y' ,dw_inc_min_date = @p_dw_inc_min_date,dw_inc_max_date = @p_dw_inc_max_date\nwhere source_table_name =@p_source_name"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "df_tds_ods",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "sp_write_begin_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataflow_tds_ods",
+						"type": "DataFlowReference",
+						"parameters": {
+							"p_start_time": "'2026-01-24 06:20:05'",
+							"p_tds_talbe": "'tds_order_info'",
+							"p_ods_table": "'ods_order_info'"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "None",
+					"cacheSinks": {
+						"firstRowOnly": true
+					}
+				}
+			},
+			{
+				"name": "Set variable mindate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "df_tds_ods",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dw_inc_min_date",
+					"value": {
+						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].min_time\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable maxdate",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "df_tds_ods",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dw_inc_max_date",
+					"value": {
+						"value": "@activity('df_tds_ods').output.runStatus.output.sink2.value[0].max_time",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"v_begin_time": {
+				"type": "String"
+			},
+			"v_end_time": {
+				"type": "String"
+			},
+			"v_table_name": {
+				"type": "String"
+			},
+			"v_inc_col": {
+				"type": "String"
+			},
+			"v_runstart_time": {
+				"type": "String"
+			},
+			"v_dw_inc_min_date": {
+				"type": "String"
+			},
+			"v_dw_inc_max_date": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
