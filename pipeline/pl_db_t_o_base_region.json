@@ -1,0 +1,803 @@
+{
+	"name": "pl_db_t_o_base_region",
+	"properties": {
+		"activities": [
+			{
+				"name": "sc_get_var",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Set v_table_name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "p_source_name",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_table_name')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
+							"type": "Query",
+							"text": "select begin_time,end_time,tss_inc_col,source_db,etl_task_id from current_info_ods where source_table_name = @p_source_name"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Set v_begin_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_begin_time",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].begin_time",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_end_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_end_time",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].end_time",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_table_name",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_table_name",
+					"value": {
+						"value": "@substring(pipeline().Pipeline,10,sub(length(pipeline().Pipeline),10))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_inc_col",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_inc_col",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].tss_inc_col",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "sp_write_tds_begin_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Set v_inc_col",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_end_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_begin_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_runstart_time",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set  v_source_db",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set v_task_id",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": "0",
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "一般",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('开始抽取',variables('v_table_name'),'到TDS')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set v_runstart_time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_runstart_time",
+					"value": {
+						"value": "@utcNow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "sp_write_tds_begin_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MySqlSource",
+						"query": {
+							"value": "@concat('select * from ', variables('v_table_name'), ' where ', variables('v_inc_col'), ' between ''', variables('v_begin_time'), ' 00:00:00'' and ''', variables('v_end_time'), ' 00:00:00''')",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MySqlTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "bronze",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "sp_write_tds_success_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sc_update_tds_flag",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "成功",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取',variables('v_table_name'),'到TDS成功')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sp_write_tds_failure_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(utcNow()), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "失败",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取',variables('v_table_name'),'到TDS失败')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sc_update_tds_flag",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Copy data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "p_source_name",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_table_name')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
+							"type": "NonQuery",
+							"text": "update current_info_ods\nset tss_succeed_flag = 'Y'\nwhere source_table_name =@p_source_name"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "Set  v_source_db",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_source_db",
+					"value": {
+						"value": "@activity('sc_get_var').output.resultSets[0].rows[0].source_db",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set v_task_id",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "sc_get_var",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_task_id",
+					"value": {
+						"value": "@string(activity('sc_get_var').output.resultSets[0].rows[0].etl_task_id)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "sp_write_ods_begin_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sp_write_tds_success_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": "0",
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "一般",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('开始抽取 tds_',variables('v_table_name'),'到ODS')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Notebook2ods",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "sp_write_ods_begin_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": {
+						"value": "@concat('/Users/20876078@qq.com/hyivy/silver_process_',variables('v_table_name'))",
+						"type": "Expression"
+					},
+					"baseParameters": {
+						"p_tdspath": {
+							"value": "@concat(variables('v_source_db'),'/',variables('v_table_name'),'/',variables('v_end_time'),'/',variables('v_task_id'))",
+							"type": "Expression"
+						},
+						"p_table_name": {
+							"value": "@variables('v_table_name')",
+							"type": "Expression"
+						},
+						"p_pipeline_run_id": {
+							"value": "@{pipeline().RunId}",
+							"type": "Expression"
+						},
+						"p_execution_date": {
+							"value": "@variables('v_end_time')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sp_write_ods_failure_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Notebook2ods",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "失败",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取 tds_',variables('v_table_name'),'到ODS失败')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "sc_update_ods_flag",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "Notebook2ods",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"parameters": [
+								{
+									"name": "p_source_name",
+									"type": "String",
+									"value": {
+										"value": "@variables('v_table_name')",
+										"type": "Expression"
+									},
+									"direction": "Input"
+								}
+							],
+							"type": "NonQuery",
+							"text": "update current_info_ods\nset hss_succeed_flag = 'Y' \nwhere source_table_name =@p_source_name"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "sp_write_ods_success_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sc_update_ods_flag",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": {
+								"value": "@div(sub(ticks(formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')), ticks(variables('v_runstart_time'))), 10000000)",
+								"type": "Expression"
+							},
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "成功",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('抽取 tds_',variables('v_table_name'),'到ODS成功')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"variables": {
+			"v_begin_time": {
+				"type": "String"
+			},
+			"v_end_time": {
+				"type": "String"
+			},
+			"v_table_name": {
+				"type": "String"
+			},
+			"v_inc_col": {
+				"type": "String"
+			},
+			"v_runstart_time": {
+				"type": "String"
+			},
+			"v_source_db": {
+				"type": "String"
+			},
+			"v_task_id": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
