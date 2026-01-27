@@ -7,12 +7,12 @@
 			"domain": "https://adb-7405605714636163.3.azuredatabricks.net",
 			"authentication": "MSI",
 			"workspaceResourceId": "/subscriptions/a4bac82e-8297-44ed-b88e-c828868c7f7d/resourceGroups/hyivy/providers/Microsoft.Databricks/workspaces/adhyivy",
-			"newClusterNodeType": "Standard_DS4_v2",
+			"newClusterNodeType": "Standard_D8s_v3",
 			"newClusterNumOfWorker": "1",
 			"newClusterSparkEnvVars": {
 				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
 			},
-			"newClusterVersion": "13.3.x-scala2.12",
+			"newClusterVersion": "15.4.x-scala2.12",
 			"clusterOption": "Fixed",
 			"newClusterInitScripts": []
 		}
