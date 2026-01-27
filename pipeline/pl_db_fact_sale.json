@@ -1,0 +1,74 @@
+{
+	"name": "pl_db_fact_sale",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_db_tds_order_info",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute_Databricks_Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/20876078@qq.com/hyivy/无标题笔记本 2026-01-26 21:00:53",
+					"baseParameters": {
+						"pipeline_run_id": {
+							"value": "@{pipeline().RunId}",
+							"type": "Expression"
+						},
+						"execution_date": {
+							"value": "@{formatDateTime(pipeline().TriggerTime, 'yyyy-MM-dd')}",
+							"type": "Expression"
+						},
+						"environment": {
+							"value": "@{variables('Environment')}",
+							"type": "Expression"
+						},
+						"batch_size": {
+							"value": "@{variables('BatchSize')}",
+							"type": "Expression"
+						},
+						"source_table": {
+							"value": "@{variables('SourceTableName')}",
+							"type": "Expression"
+						},
+						"table_list": {
+							"value": "@{string(variables('TableList'))}",
+							"type": "Expression"
+						},
+						"config_json": {
+							"value": "@{string(variables('ProcessConfig'))}",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

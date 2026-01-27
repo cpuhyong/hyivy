@@ -510,6 +510,103 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "sp_write_ods_begin_log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "sp_write_success_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[common_write_log]",
+					"storedProcedureParameters": {
+						"p_execute_sec": {
+							"value": "0",
+							"type": "Decimal"
+						},
+						"p_indents": {
+							"value": "1",
+							"type": "Int32"
+						},
+						"p_log_grade": {
+							"value": "一般",
+							"type": "String"
+						},
+						"p_log_message": {
+							"value": {
+								"value": "@concat('开始抽取 tds_',variables('v_table_name'),'到ODS')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"p_task_proc_name": {
+							"value": {
+								"value": "@concat(pipeline().Pipeline,':',pipeline().RunId)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Notebook2ods",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "sp_write_ods_begin_log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/20876078@qq.com/hyivy/hygmall",
+					"baseParameters": {
+						"p_tdspath": {
+							"value": "@concat(variables('v_source_db'),'/',variables('v_table_name'),'/',variables('v_end_time'),'/',variables('v_task_id'))",
+							"type": "Expression"
+						},
+						"p_table_name": {
+							"value": "@variables('v_table_name')",
+							"type": "Expression"
+						},
+						"p_pipeline_run_id": "@{pipeline().RunId}",
+						"p_execution_date": {
+							"value": "@variables('v_end_time')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"variables": {
