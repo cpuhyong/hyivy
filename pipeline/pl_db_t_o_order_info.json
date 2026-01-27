@@ -587,7 +587,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"notebookPath": {
-						"value": "@concat('/Users/20876078qq.com/hyivy/silver_process_',variables('v_table_name'))",
+						"value": "@concat('/Users/20876078@qq.com/hyivy/silver_process_',variables('v_table_name'))",
 						"type": "Expression"
 					},
 					"baseParameters": {
