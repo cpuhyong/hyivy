@@ -586,7 +586,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/20876078@qq.com/hyivy/silver_process_orders",
+					"notebookPath": {
+						"value": "@concat('/Users/20876078qq.com/hyivy/silver_process_',variables('v_table_name'))",
+						"type": "Expression"
+					},
 					"baseParameters": {
 						"p_tdspath": {
 							"value": "@concat(variables('v_source_db'),'/',variables('v_table_name'),'/',variables('v_end_time'),'/',variables('v_task_id'))",
