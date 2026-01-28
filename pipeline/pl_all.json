@@ -103,7 +103,7 @@
 				}
 			},
 			{
-				"name": "Execute Pipeline dwd",
+				"name": "Execute Pipeline dws",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -125,7 +125,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "test",
+						"referenceName": "pl_dws",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
@@ -136,7 +136,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Execute Pipeline dwd",
+						"activity": "Execute Pipeline dws",
 						"dependencyConditions": [
 							"Succeeded"
 						]
